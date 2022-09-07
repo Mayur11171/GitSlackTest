@@ -1,4 +1,4 @@
-name: Clone-RepoTry1.yml
+name: Clone-RepoTry1
 
 on: 
   workflow_dispatch:
@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        Plan: ["Temp/Test1","Temp/Test2"]
+        Plan: ["Inventory Transactions","SOAPI","SYDATA-Sales Order","Work Order"]
     
     steps:
     - name: Get current date
@@ -49,11 +49,23 @@ jobs:
       with:
         distribution: 'adopt'
         java-version: 8
-    
-    - name: Check out my other private repo
+
+    - name: Clone Repository
       uses: actions/checkout@master
       with:
           repository: msuryawanshi20/ParallelExecution
+    
+    - name: Send Slack Message
+      uses: archive/github-actions-slack@master
+      id: send-message
+      with:
+        slack-function: send-message
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-channel: C03KF4U7TSP
+        slack-text: Execution Started for Test Plan "*${{ steps.PlanName.outputs.PlanName}}*" at "*${{ steps.date.outputs.date }}*"
+
+    - name: Send "Slack Message" Result
+      run: echo "Data - ${{ steps.send-message.outputs.slack-result }}"
 
     - name: Execute Test Plan-${{matrix.Plan}}
       run: |
@@ -72,7 +84,7 @@ jobs:
         cd $GITHUB_WORKSPACE/ANT
         echo "Selected Plan Name="${{matrix.Plan}}
         echo "Selected Environment is="${{matrix.Plan}}
-        xvfb-run ant -file build.xml "-DTestEnv=${{ github.event.inputs.TestEnv }}" "-DBrowser=${{ github.event.inputs.Browser }}" "-DTestPlan=${{matrix.Plan}}" runtests
+        xvfb-run ant -file build.xml "-DTestEnv=${{ github.event.inputs.TestEnv }}" "-DBrowser=${{ github.event.inputs.Browser }}" "-DTestPlan=Regression_API/${{matrix.Plan}}" runtests
         
     - name: Generate Junit Report
       uses: phoenix-actions/test-reporting@v8
