@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        Plan: ["Inventory Transactions","SOAPI","SYDATA-Sales Order","Work Order"]
+        Plan: ["Accounts Receivable","Inventory Transactions","POLOADER","SOAPI","SYDATA-Purchase Order","SYDATA-Sales Order","Work Order"]
     
     steps:
     - name: Get current date
@@ -51,7 +51,7 @@ jobs:
         java-version: 8
 
     - name: Clone Repository
-      uses: actions/checkout@master
+      uses: actions/checkout@Test-Branch
       with:
           repository: cboyapati/rsqasampleproj
           token: ${{ secrets.GITTOKEN }}    
