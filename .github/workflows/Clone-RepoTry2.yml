@@ -53,7 +53,7 @@ jobs:
     - name: Clone Repository
       uses: actions/checkout@master
       with:
-          repository: msuryawanshi20/ParallelExecution
+          repository: cboyapati/rsqasampleproj
           token: ${{ secrets.GITTOKEN }}    
           
     - name: Send Slack Message
