@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        Plan: ["Accounts Receivable","Inventory Transactions","POLOADER","SOAPI","SYDATA-Purchase Order","SYDATA-Sales Order","Work Order"]
+        Plan: ["Inventory Transactions","POLOADER","SOAPI","SYDATA-Purchase Order","SYDATA-Sales Order","Work Order"]
     
     steps:
     - name: Get current date
