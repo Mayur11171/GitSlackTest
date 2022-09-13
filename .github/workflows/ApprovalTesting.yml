@@ -13,10 +13,11 @@ on:
         options: 
         - Chrome
         - Firefox
- 
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: production 
     env: 
        PROVAR_HOME: ${{ github.workspace }}/ProvarHome
        
