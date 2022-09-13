@@ -29,6 +29,11 @@ jobs:
         job_name: build (${{matrix.Plan}})
         per_page: 100
 
+    - name: Username
+      run: |
+        echo "User is- ${{ github.actor }}"
+
+
     - name: Output Current Job Log URL
       run: |
         echo "::set-output name=URL::${{ steps.jobs.outputs.html_url }}"
@@ -38,5 +43,5 @@ jobs:
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "|     Author(s)       |           Commits          |  Files Changed  | File Removed  |  Merge SHA |" >> $GITHUB_STEP_SUMMARY
         echo "| ------------------- | -------------------------- | --------------- |---------------|--------------|" >> $GITHUB_STEP_SUMMARY
-        echo "|   ${github.actor}  |              4             |     13          |       4       |   [${{ steps.jobs.outputs.html_url }}] |" >> $GITHUB_STEP_SUMMARY
+        echo "|   ${{ github.actor }}  |              4             |     13          |       4       |   [${{ steps.jobs.outputs.html_url }}] |" >> $GITHUB_STEP_SUMMARY
       
