@@ -41,7 +41,7 @@ jobs:
         
         echo "## Train pull request analysis" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        echo "|     Author(s)       |           Commits          |  Files Changed  | File Removed  |  Merge SHA |" >> $GITHUB_STEP_SUMMARY
-        echo "| ------------------- | -------------------------- | --------------- |---------------|--------------|" >> $GITHUB_STEP_SUMMARY
-        echo "|   ${{ github.actor }}  |              4             |     13          |       4       |   [${{ steps.jobs.outputs.html_url }}] |" >> $GITHUB_STEP_SUMMARY
+        echo "|     Author(s)       |           Commits          |  Files Changed  | File Removed  |  Merge SHA |" > $GITHUB_STEP_SUMMARY
+        echo "| ------------------- | -------------------------- | --------------- |---------------|--------------|" > $GITHUB_STEP_SUMMARY
+        echo "|  @${{ github.actor }}  |              4             |     13          |       4       |   [${{ steps.jobs.outputs.html_url }}]() |" > $GITHUB_STEP_SUMMARY
       
