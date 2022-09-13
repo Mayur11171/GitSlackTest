@@ -21,9 +21,7 @@ jobs:
       matrix:
         Plan: ["Inventory-both","Work Order-Both","Recurring Billing","RMA","Shop Floor","System_Setup"]   
     steps:
-    - name: Adding markdown
-      run: | 
- - name: Get Current Job Log URL 
+    - name: Get Current Job Log URL 
       uses: Tiryoh/gha-jobid-action@v0
       id: jobs
       with:
