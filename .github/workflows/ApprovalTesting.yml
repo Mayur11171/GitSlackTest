@@ -17,7 +17,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: production 
+    environment: QA-Automation 
     env: 
        PROVAR_HOME: ${{ github.workspace }}/ProvarHome
        
