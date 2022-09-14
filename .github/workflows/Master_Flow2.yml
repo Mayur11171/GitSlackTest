@@ -11,13 +11,12 @@ on:
 jobs:
   call-workflow-1:
     name: WorkFlow-1
-    uses: ./.github/workflows/Child-11.yml
+    uses: ./.github/workflows/Child-1.yml
     with:
       TestEnv: ${{ github.event.inputs.TestEnv }}
     secrets: inherit
   call-workflow-2:
     name: WorkFlow-2
-    needs: call-workflow-1
     uses: ./.github/workflows/Child-2.yml
     with:
       TestEnv: ${{ github.event.inputs.TestEnv }}
