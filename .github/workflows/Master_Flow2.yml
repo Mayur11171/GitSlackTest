@@ -7,11 +7,12 @@ on:
         type: choice
         description: Please select environment
         options: 
-        - AutomationOrg 
+        - default
+        - AutomationOrg
 jobs:
   call-workflow-1:
     name: WorkFlow-1
-    uses: ./.github/workflows/Child-1.yml
+    uses: ./.github/workflows/Child-101.yml
     with:
       TestEnv: ${{ github.event.inputs.TestEnv }}
     secrets: inherit
@@ -19,7 +20,7 @@ jobs:
     name: WorkFlow-2
     if: ${{ always() }}  
     needs: call-workflow-1
-    uses: ./.github/workflows/Child-2.yml
+    uses: ./.github/workflows/Child-102.yml
     with:
       TestEnv: ${{ github.event.inputs.TestEnv }}
     secrets: inherit
