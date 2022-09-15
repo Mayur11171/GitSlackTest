@@ -76,8 +76,9 @@ jobs:
         sudo add-apt-repository ppa:mozillateam/firefox-next && sudo apt install firefox
         echo $PROVAR_HOME
         cd $GITHUB_WORKSPACE/ANT
+        echo "Workspace Path="${{GITHUB_WORKSPACE}}
         echo "Selected Plan Name="${{matrix.Plan}}
-        echo "Selected Environment is="${{matrix.Plan}}
+        echo "Selected Environment is="${{github.event.inputs.Browser}}
         xvfb-run ant -file build.xml "-DTestEnv=${{ github.event.inputs.TestEnv }}" "-DBrowser=${{ github.event.inputs.Browser }}" "-DTestPlan=Temp/${{matrix.Plan}}" runtests
         
     - name: Generate Junit Report
@@ -87,6 +88,8 @@ jobs:
       with:
         name: JUnit report-${{ steps.PlanName.outputs.PlanName}}    # Name of the check run which will be created
         path: ${{ github.workspace }}/ANT/Results/JUnit html/TESTS*.xml    # Path to test results
+        list-suites: 'all'
+        list-tests: 'all'
         reporter: jest-junit        # Format of test results
 
     - name: Send Thread Message
