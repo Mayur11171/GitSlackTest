@@ -7,8 +7,7 @@ on:
         type: choice
         description: Please select environment
         options: 
-        - default
-        - AutomationOrg 
+        - AutomationOrg
 jobs:
   call-workflow-1:
     name: WorkFlow-1
