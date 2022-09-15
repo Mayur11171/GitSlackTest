@@ -9,16 +9,16 @@ on:
         options: 
         - AutomationOrg
 jobs:
-  call-workflow-1:
-    name: WorkFlow-1
+  call-workflow-11:
+    name: WorkFlow-11
     uses: ./.github/workflows/Child-101.yml
     with:
       TestEnv: ${{ github.event.inputs.TestEnv }}
     secrets: inherit
-  call-workflow-2:
-    name: WorkFlow-2
+  call-workflow-21:
+    name: WorkFlow-21
     if: ${{ always() }}  
-    needs: call-workflow-1
+    needs: call-workflow-11
     uses: ./.github/workflows/Child-102.yml
     with:
       TestEnv: ${{ github.event.inputs.TestEnv }}
