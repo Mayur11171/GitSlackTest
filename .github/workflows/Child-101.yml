@@ -86,7 +86,7 @@ jobs:
       if: ${{ success() || failure() }}   # run this step even if previous step failed
       with:
         name: JUnit report-${{ steps.PlanName.outputs.PlanName}}    # Name of the check run which will be created
-        path: ${{ github.workspace }}/ANT/Results/JUnit html/TESTS-TestSuites.xml    # Path to test results
+        path: ${{ github.workspace }}/ANT/Results/JUnit html/TESTS*.xml    # Path to test results
         reporter: jest-junit        # Format of test results
 
     - name: Send Thread Message
