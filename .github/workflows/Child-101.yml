@@ -1,11 +1,13 @@
 name: Child-101
 
 on: 
-  workflow_call:
+  workflow_dispatch:
     inputs:
       TestEnv:
-        required: true
-        type: string
+        type: choice
+        description: Please select environment
+        options: 
+        - AutomationOrg
 
 jobs:
   build:
