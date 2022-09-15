@@ -79,7 +79,7 @@ jobs:
         echo "Workspace Path="${{GITHUB_WORKSPACE}}
         echo "Selected Plan Name="${{matrix.Plan}}
         echo "Selected Environment is="${{github.event.inputs.Browser}}
-        xvfb-run ant -file build.xml "-DTestEnv=${{ github.event.inputs.TestEnv }}" "-DBrowser=${{ github.event.inputs.Browser }}" "-DTestPlan=Temp/${{matrix.Plan}}" runtests
+        xvfb-run ant -file build.xml "-DTestEnv=default" "-DBrowser=${{ github.event.inputs.Browser }}" "-DTestPlan=Temp/${{matrix.Plan}}" runtests
         
     - name: Generate Junit Report
       uses: phoenix-actions/test-reporting@v8
