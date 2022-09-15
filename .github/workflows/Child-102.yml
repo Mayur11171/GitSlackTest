@@ -1,4 +1,4 @@
-name: Child-102
+name: Child-1
 
 on: 
   workflow_call:
@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        Plan: ["Test2"]
+        Plan: ["Test1","Test2"]
     
     steps:
     - name: Get current date
@@ -45,9 +45,9 @@ jobs:
     - name: Clone Repository
       uses: actions/checkout@v2
       with:
-          ref: 'master'
-          repository: msuryawanshi20/ParallelExecution
-          token: ${{ secrets.GITTOKEN }} 
+          ref: 'Test-Branch'
+          repository: cboyapati/rsqasampleproj
+          token: ${{ secrets.GITTOKEN }}    
  
     - name: Send Slack Message
       uses: archive/github-actions-slack@master
@@ -77,21 +77,21 @@ jobs:
         echo $PROVAR_HOME
         cd $GITHUB_WORKSPACE/ANT
         echo "Selected Plan Name="${{matrix.Plan}}
-        echo "Selected Environment is="${{matrix.Plan}}
+        echo "Selected Environment is="${{workflow_call.input.TestEnv}}
         xvfb-run ant -file build.xml "-DTestEnv=default" "-DBrowser=${{ github.event.inputs.Browser }}" "-DTestPlan=Temp/${{matrix.Plan}}" runtests
         
     - name: Generate Junit Report
-      uses: phoenix-actions/test-reporting@v9
+      uses: phoenix-actions/test-reporting@v8
       id: test-report               # Set ID reference for step
       if: ${{ success() || failure() }}   # run this step even if previous step failed
       with:
         name: JUnit report-${{ steps.PlanName.outputs.PlanName}}    # Name of the check run which will be created
-        path: ${{ github.workspace }}/ANT/Results/JUnit html/TEST*.xml    # Path to test results
+        path: ${{ github.workspace }}/ANT/Results/JUnit html/TESTS-TestSuites.xml    # Path to test results
         reporter: jest-junit        # Format of test results
 
     - name: Send Thread Message
       uses: archive/github-actions-slack@master
-      if: ${{ success() || failure() }}
+      if: ${{ success() }}
       with:
         slack-function: send-message
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
@@ -99,7 +99,7 @@ jobs:
         slack-text: JUnit Report Link- ${{ steps.test-report.outputs.runHtmlUrl }} Build_Status-"*${{job.status}}*"
         slack-optional-thread_ts: ${{ fromJson(steps.send-message.outputs.slack-result).response.message.ts }}
         slack-optional-reply_broadcast: true # To broadcast thread reply in channel
-        
+     
     - name: Compressing Results folder(Create Zip File)
       if: ${{ always() }}
       run: |
