@@ -1,0 +1,23 @@
+name: Final-Flow
+on: 
+  workflow_dispatch:
+    inputs:
+      TestEnv:
+        type: choice
+        description: Please select environment
+        options: 
+        - AutomationOrg
+        - default
+jobs:
+  call-workflow-1:
+    uses: ./.github/workflows/Final-Callable1.yml
+    with:
+      TestEnv: ${{ github.event.inputs.TestEnv }}
+    secrets: inherit
+  call-workflow-2:
+    if: ${{ always() }}  
+    needs: call-workflow-1
+    uses: ./.github/workflows/Final-Callable2.yml
+    with:
+      TestEnv: ${{ github.event.inputs.TestEnv }}
+    secrets: inherit
