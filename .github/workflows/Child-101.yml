@@ -1,13 +1,11 @@
-name: Child-101
+name: Child-1
 
 on: 
-  workflow_dispatch:
+  workflow_call:
     inputs:
       TestEnv:
-        type: choice
-        description: Please select environment
-        options: 
-        - AutomationOrg
+        required: true
+        type: string
 
 jobs:
   build:
@@ -18,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        Plan: ["Test1"]
+        Plan: ["Test1","Test2"]
     
     steps:
     - name: Get current date
@@ -47,8 +45,8 @@ jobs:
     - name: Clone Repository
       uses: actions/checkout@v2
       with:
-          ref: 'master'
-          repository: msuryawanshi20/ParallelExecution
+          ref: 'Test-Branch'
+          repository: cboyapati/rsqasampleproj
           token: ${{ secrets.GITTOKEN }}    
  
     - name: Send Slack Message
@@ -78,9 +76,8 @@ jobs:
         sudo add-apt-repository ppa:mozillateam/firefox-next && sudo apt install firefox
         echo $PROVAR_HOME
         cd $GITHUB_WORKSPACE/ANT
-        echo "Workspace Path="${{GITHUB_WORKSPACE}}
         echo "Selected Plan Name="${{matrix.Plan}}
-        echo "Selected Environment is="${{github.event.inputs.Browser}}
+        echo "Selected Environment is="${{workflow_call.input.TestEnv}}
         xvfb-run ant -file build.xml "-DTestEnv=default" "-DBrowser=${{ github.event.inputs.Browser }}" "-DTestPlan=Temp/${{matrix.Plan}}" runtests
         
     - name: Generate Junit Report
@@ -89,14 +86,12 @@ jobs:
       if: ${{ success() || failure() }}   # run this step even if previous step failed
       with:
         name: JUnit report-${{ steps.PlanName.outputs.PlanName}}    # Name of the check run which will be created
-        path: ${{ github.workspace }}/ANT/Results/JUnit html/TESTS*.xml    # Path to test results
-        list-suites: 'all'
-        list-tests: 'all'
+        path: ${{ github.workspace }}/ANT/Results/JUnit html/TESTS-TestSuites.xml    # Path to test results
         reporter: jest-junit        # Format of test results
 
     - name: Send Thread Message
       uses: archive/github-actions-slack@master
-      if: ${{ success() || failure() }}
+      if: ${{ success() }}
       with:
         slack-function: send-message
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
