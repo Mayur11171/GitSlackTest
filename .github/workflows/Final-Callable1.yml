@@ -83,31 +83,15 @@ jobs:
     - name: Generate Junit Report
       uses: phoenix-actions/test-reporting@v8
       id: test-report               # Set ID reference for step
-      if: ${{ success() }}   # run this step even if previous step failed
+      if: ${{ always() }}
       with:
         name: JUnit report-${{ steps.PlanName.outputs.PlanName}}    # Name of the check run which will be created
         path: ${{ github.workspace }}/ANT/Results/JUnit html/TESTS-TestSuites.xml    # Path to test results
         reporter: jest-junit        # Format of test results
-
-    - name: Publish Test Report NEW TRY
-      uses: mikepenz/action-junit-report@v3
-      id: test-report1
-      if: always() # always run even if the previous step fails
-      with:
-         report_paths: '${{ github.workspace }}/ANT/Results/JUnit html/TEST*.xml'    # Path to test results 
-         check_name: New REPORT${{matrix.Plan}}
-         fail_on_failure: false
-         require_tests: true
-         include_passed: true
-         check_retries: true
-         job_summary: true
-         detailed_summary: true
-         annotate_notice: true
-
-
-    - name: Send Thread Message
+         
+    - name: Send JUNIT Report Link to Slack
       uses: archive/github-actions-slack@master
-      if: ${{ success() }}
+      if: ${{ always() }}
       with:
         slack-function: send-message
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
@@ -115,6 +99,22 @@ jobs:
         slack-text: JUnit Report Link- ${{ steps.test-report.outputs.runHtmlUrl }} Build_Status-"*${{job.status}}*"
         slack-optional-thread_ts: ${{ fromJson(steps.send-message.outputs.slack-result).response.message.ts }}
         slack-optional-reply_broadcast: true # To broadcast thread reply in channel
+        
+    - name: Publish Test Report
+      uses: mikepenz/action-junit-report@v3
+      id: test-report1
+      if: ${{ always() }}
+      with:
+         report_paths: '${{ github.workspace }}/ANT/Results/JUnit html/TEST*.xml'    # Path to test results 
+         check_name: JUnit Report-${{matrix.Plan}}
+         fail_on_failure: false
+         require_tests: true
+         include_passed: true
+         check_retries: true
+         job_summary: true
+         detailed_summary: true
+         annotate_notice: false        
+        
      
     - name: Compressing Results folder(Create Zip File)
       if: ${{ always() }}
