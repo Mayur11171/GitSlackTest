@@ -1,4 +1,4 @@
-name: Final-Callable2
+name: Final-Callable1
 
 on: 
   workflow_call:
@@ -80,6 +80,26 @@ jobs:
         echo "Selected Environment is="${{matrix.Plan}}
         xvfb-run ant -file build.xml "-DTestEnv=${{ github.event.inputs.TestEnv }}" "-DBrowser=${{ github.event.inputs.Browser }}" "-DTestPlan=Regression_API/${{matrix.Plan}}" runtests
         
+#    - name: Generate Junit Report
+#      uses: phoenix-actions/test-reporting@v8
+#      id: test-report               # Set ID reference for step
+#      if: ${{ always() }}
+#      with:
+#        name: JUnit report-${{ steps.PlanName.outputs.PlanName}}    # Name of the check run which will be created
+#        path: ${{ github.workspace }}/ANT/Results/JUnit html/TESTS-TestSuites.xml    # Path to test results
+#        reporter: jest-junit        # Format of test results
+         
+#    - name: Send JUNIT Report Link to Slack
+#      uses: archive/github-actions-slack@master
+#      if: ${{ always() }}
+#      with:
+#        slack-function: send-message
+#        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+#        slack-channel: ${{ fromJson(steps.send-message.outputs.slack-result).response.channel }}
+#        slack-text: JUnit Report Link- ${{ steps.test-report.outputs.runHtmlUrl }} Build_Status-"*${{job.status}}*"
+#        slack-optional-thread_ts: ${{ fromJson(steps.send-message.outputs.slack-result).response.message.ts }}
+#        slack-optional-reply_broadcast: true # To broadcast thread reply in channel
+        
     - name: Publish Test Report
       uses: mikepenz/action-junit-report@v3
       id: test-report1
@@ -94,6 +114,7 @@ jobs:
          job_summary: true
          detailed_summary: true
          annotate_notice: false        
+        
      
     - name: Compressing Results folder(Create Zip File)
       if: ${{ always() }}
@@ -129,4 +150,3 @@ jobs:
         slack-text: Execution Completed For Test Plan-"*${{matrix.Plan}}*"-Execution_Status-"*${{job.status}}*"
         slack-optional-thread_ts: ${{ fromJson(steps.send-message.outputs.slack-result).response.message.ts }}
         slack-optional-reply_broadcast: true # To broadcast thread reply in channel
-
