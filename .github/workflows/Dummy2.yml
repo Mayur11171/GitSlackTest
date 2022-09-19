@@ -3,13 +3,7 @@ name: Dummy2
 on: 
   workflow_dispatch:
     inputs:
-      TestEnv:
-        type: choice
-        description: Select environment
-        options: 
-        - AutomationOrg
-        - default 
-      message:
+      Build-Version:
         required: true
       environment:
         type: environment
@@ -17,6 +11,7 @@ on:
 jobs:
   Send-Slack-Notification:
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
     
     steps:
     - name: Send Slack Message-Personal Slack
@@ -26,7 +21,7 @@ jobs:
         slack-function: send-message
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN1 }}
         slack-channel: C03KF4U7TSP
-        slack-text: Automation Script execution started for ERP Version-${{ github.event.inputs.message }} On ${{ github.event.inputs.environment }} by ${{ github.actor }}
+        slack-text: Automation Script execution started for ERP Version-${{ github.event.inputs.Build-Version }} On ${{ github.event.inputs.environment }} by ${{ github.actor }}
 
     - name: Send "Slack Message" Result
       run: echo "Data - ${{ steps.send-message11.outputs.slack-result }}"
