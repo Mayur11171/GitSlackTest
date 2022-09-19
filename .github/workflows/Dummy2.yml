@@ -1,0 +1,50 @@
+name: Dummy2
+
+on: 
+  workflow_dispatch:
+    inputs:
+      TestEnv:
+        type: choice
+        description: Select environment
+        options: 
+        - AutomationOrg
+        - default 
+      message:
+        required: true
+      environment:
+        type: environment
+  
+ jobs:
+   Send-Slack-Notification:
+    build:
+      runs-on: ubuntu-latest
+    steps:
+
+    - name: Send Slack Message-Personal Slack
+      uses: archive/github-actions-slack@master
+      id: send-message11
+      with:
+        slack-function: send-message
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN1 }}
+        slack-channel: C03KF4U7TSP
+        slack-text: Automation Script execution started for ERP Version-${{ github.event.inputs.message }} On ${{ github.event.inputs.environment }} by ${{ github.actor }}
+
+    - name: Send "Slack Message" Result
+      run: echo "Data - ${{ steps.send-message11.outputs.slack-result }}"
+ 
+ 
+ 
+  call-workflow-1:
+    if: ${{ always() }}  
+    needs: Send-Slack-Notification  
+    uses: ./.github/workflows/Final-Callable1.yml
+    with:
+      TestEnv: ${{ github.event.inputs.TestEnv }}
+    secrets: inherit
+  call-workflow-2:
+    if: ${{ always() }}  
+    needs: call-workflow-1
+    uses: ./.github/workflows/Final-Callable2.yml
+    with:
+      TestEnv: ${{ github.event.inputs.TestEnv }}
+    secrets: inherit
