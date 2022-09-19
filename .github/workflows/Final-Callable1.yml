@@ -54,7 +54,7 @@ jobs:
       id: send-message
       with:
         slack-function: send-message
-        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN1 }}
         slack-channel: C03KF4U7TSP
         slack-text: Execution Started for Test Plan "*${{ steps.PlanName.outputs.PlanName}}*" at "*${{ steps.date.outputs.date }}*"
 
@@ -94,7 +94,7 @@ jobs:
 #      if: ${{ always() }}
 #      with:
 #        slack-function: send-message
-#        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+#        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN1 }}
 #        slack-channel: ${{ fromJson(steps.send-message.outputs.slack-result).response.channel }}
 #        slack-text: JUnit Report Link- ${{ steps.test-report.outputs.runHtmlUrl }} Build_Status-"*${{job.status}}*"
 #        slack-optional-thread_ts: ${{ fromJson(steps.send-message.outputs.slack-result).response.message.ts }}
@@ -129,7 +129,7 @@ jobs:
       uses: adrey/slack-file-upload-action@master
       if: ${{ failure() }}
       with:
-       token: ${{ secrets.SLACK_TOKEN }}
+       token: ${{ secrets.SLACK_TOKEN1 }}
        path: ${{ github.workspace }}/ANT/Execution_Report_for_${{github.workflow}}_${{ steps.PlanName.outputs.PlanName}}-${{ steps.date.outputs.date }}_${{github.run_attempt}}-${{job.status}}.zip
        channel: provar-gitaction  
 
@@ -145,7 +145,7 @@ jobs:
       if: ${{ always() }}
       with:
         slack-function: send-message
-        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN1 }}
         slack-channel: ${{ fromJson(steps.send-message.outputs.slack-result).response.channel }}
         slack-text: Execution Completed For Test Plan-"*${{matrix.Plan}}*"-Execution_Status-"*${{job.status}}*"
         slack-optional-thread_ts: ${{ fromJson(steps.send-message.outputs.slack-result).response.message.ts }}
