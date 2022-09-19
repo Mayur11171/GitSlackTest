@@ -14,6 +14,11 @@ on:
         options: 
         - AutomationOrg
         - default 
+      message:
+        required: true
+      environment:
+        type: environment
+
 
 jobs:
   build:
@@ -50,25 +55,36 @@ jobs:
         distribution: 'adopt'
         java-version: 8
 
-    - name: Clone Repository
-      uses: actions/checkout@v2
-      with:
-          ref: 'Test-Branch'
-          repository: cboyapati/rsqasampleproj
-          token: ${{ secrets.GITTOKEN }}    
+#    - name: Clone Repository
+#      uses: actions/checkout@v2
+#      with:
+#          ref: 'Test-Branch'
+#          repository: cboyapati/rsqasampleproj
+#          token: ${{ secrets.GITTOKEN }}    
  
-    - name: Send Slack Message-RootstockMfg
+#    - name: Send Slack Message-RootstockMfg
+#      uses: archive/github-actions-slack@master
+#      id: send-message
+#      with:
+#        slack-function: send-message
+#        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
+#        slack-channel: C0430LZJSG4
+#        slack-text: Execution Started for Test Plan "*${{ steps.PlanName.outputs.PlanName}}*" at "*${{ steps.date.outputs.date }}*"
+#
+#    - name: Send "Slack Message" Result
+#      run: echo "Data - ${{ steps.send-message.outputs.slack-result }}"
+
+
+    - name: Send Slack Message-Personal Slack
       uses: archive/github-actions-slack@master
-      id: send-message
+      id: send-message11
       with:
         slack-function: send-message
-        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
-        slack-channel: C0430LZJSG4
-        slack-text: Execution Started for Test Plan "*${{ steps.PlanName.outputs.PlanName}}*" at "*${{ steps.date.outputs.date }}*"
-
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN1 }}
+        slack-channel: C03KF4U7TSP
+        slack-text: Automation Script execution started for ERP Version-${{ github.event.inputs.message }} ON ${{ github.event.inputs.environment }}
     - name: Send "Slack Message" Result
-      run: echo "Data - ${{ steps.send-message.outputs.slack-result }}"
-
+      run: echo "Data - ${{ steps.send-message11.outputs.slack-result }}"
 
 
     - name: Send Slack Message-Personal Slack
