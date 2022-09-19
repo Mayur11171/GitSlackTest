@@ -27,7 +27,6 @@ jobs:
       run: echo "Data - ${{ steps.send-message11.outputs.slack-result }}"
  
   call-workflow-1:
-    if: ${{ always() }}  
     needs: Send-Slack-Notification  
     uses: ./.github/workflows/Final-Callable1.yml
     with:
