@@ -1,0 +1,26 @@
+name: Dummy3
+
+on: 
+  workflow_dispatch:
+    inputs:
+      Build-Version:
+        required: true
+      Environment:
+        type: environment
+  
+jobs:
+  Execution-Completed-Slack-Notification:
+    runs-on: ubuntu-latest
+   
+    steps:
+    - name: Send Slack Message-Personal Slack
+      uses: archive/github-actions-slack@master
+      id: send-message1
+      with:
+        slack-function: send-message
+        slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN1 }}
+        slack-channel: C03KF4U7TSP
+        slack-text: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        
+    - name: Send "Slack Message" Result
+      run: echo "Data - ${{ steps.send-message1.outputs.slack-result }}"
