@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest    
     steps:
     - name: send build completion notification
-    - uses: 8398a7/action-slack@v3
+      uses: 8398a7/action-slack@v3
       with:
         status: custom
         fields: workflow,job,commit,repo,ref,author,took
@@ -54,5 +54,4 @@ jobs:
               text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB}) executed by ${{ github.actor }}, status is ${{ job.status }} and took ${process.env.AS_TOOK} for execution`,
             }]
           }
-      env: 
-       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
