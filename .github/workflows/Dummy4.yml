@@ -1,4 +1,4 @@
-name: Dummy4
+name: Dummy1
 
 on: 
   workflow_dispatch:
@@ -6,24 +6,24 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
+    env: 
+       PROVAR_HOME: ${{ github.workspace }}/ProvarHome
+       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+       
     steps:
-      - uses: act10ns/slack@v1
-        with:
-          status: starting
-          channel: '#provar_notification'
-          message: Starting Docker Build and Push...
-        if: always()
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Variables
-        id: vars
-        run: echo "::set-output name=SHORT_COMMIT_ID::$(git rev-parse --short HEAD)"
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d_%H_%M_%S')"
 
-      - uses: act10ns/slack@v1
-        with:
-          status: ${{ job.status }}
-          steps: ${{ toJson(steps) }}
-          channel: '#provar_notification'
-        if: always()
+    - uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        fields: workflow,job,commit,repo,ref,author,took
+        custom_payload: |
+          {
+            attachments: [{
+              color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+              text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} by ${process.env.AS_AUTHOR} ${{ job.status }} in ${process.env.AS_TOOK}`,
+            }]
+          }
+  
