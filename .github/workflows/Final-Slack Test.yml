@@ -25,22 +25,10 @@ jobs:
 
     - name: Send "Slack Message" Result
       run: echo "Data - ${{ steps.send-message.outputs.slack-result }}"
- 
-  workflow-1:
-    uses: ./.github/workflows/Final-Callable1.yml
-    with:
-      TestEnv: ${{ github.event.inputs.Environment }}
-    secrets: inherit
-  
-  workflow-2:
-    if: ${{ always() }}  
-    needs: workflow-1
-    uses: ./.github/workflows/Test1.yml
-    
-    secrets: inherit  
+
   Execution-Completed-Slack-Notification:
     if: ${{ always() }}  
-    needs: [workflow-1,workflow-2]
+    needs: Execution-Start-Slack-Notification
     runs-on: ubuntu-latest
     env: 
        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
