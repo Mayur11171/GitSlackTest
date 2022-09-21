@@ -27,7 +27,7 @@ jobs:
         slack-function: send-message
         slack-bot-user-oauth-access-token: ${{ secrets.SLACK_TOKEN }}
         slack-channel: C043T1M03Q8
-        slack-text: Execution Completed. More details can be found on ${{ steps.PlanName.outputs.PlanName}}
+        slack-text: ${{ steps.PlanName.outputs.PlanName}}
         
     - name: Send "Slack Message" Result
       run: echo "Data - ${{ steps.send-message1.outputs.slack-result }}"
